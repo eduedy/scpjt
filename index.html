@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>바나프레소 | 핑크빛 위트가 가득한 반전 가성비 커피</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bana-pink': '#E11D74',
+                        'bana-pink-light': '#FFF0F5',
+                        'bana-pink-hover': '#FF2E93',
+                        'bana-purple': '#8E2DE2',
+                        'charcoal': '#121316',
+                        'charcoal-light': '#1C1E24',
+                        'charcoal-card': '#252830'
+                    },
+                    fontFamily: {
+                        'sans': ['Pretendard', 'ui-sans-serif', 'system-ui'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Web Fonts -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <!-- Tone.js for retro sound effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <!-- Canvas Confetti for explosive success animations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/LINESeedKR-Bd.woff2');
+        
+        .font-title {
+            font-family: 'LINESeedKR-Bd', 'Pretendard', sans-serif;
+            word-break: keep-all;
+        }
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #121316;
+            color: #FFFFFF;
+            overflow-x: hidden;
+        }
+        /* Custom Keyframe Animations */
+        @keyframes subtle-rotate {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+        @keyframes float-delayed {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(-4deg); }
+        }
+        @keyframes border-glow {
+            0%, 100% { border-color: rgba(225, 29, 116, 0.4); box-shadow: 0 0 15px rgba(225, 29, 116, 0.2); }
+            50% { border-color: rgba(142, 45, 226, 0.8); box-shadow: 0 0 25px rgba(142, 45, 226, 0.5); }
+        }
+        @keyframes pulse-neon {
+            0%, 100% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 20px rgba(225, 29, 116, 0.6); }
+            50% { transform: scale(1.05); opacity: 1; box-shadow: 0 0 35px rgba(225, 29, 116, 0.9); }
+        }
+        
+        .animate-float-1 { animation: float-slow 6s ease-in-out infinite; }
+        .animate-float-2 { animation: float-delayed 8s ease-in-out infinite; }
+        .animate-glow-border { animation: border-glow 4s infinite; }
+        .animate-pulse-neon { animation: pulse-neon 2s infinite; }
+        .bg-gradient-radial {
+            background: radial-gradient(circle, var(--tw-gradient-stops));
+        }
+        
+        /* Glassmorphism scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121316;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(225, 29, 116, 0.3);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(225, 29, 116, 0.6);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-bana-pink selection:text-white">
+
+    <!-- Interactive Mouse Glow Container (Light Spot follow mouse) -->
+    <div id="ambient-spotlight" class="fixed pointer-events-none w-[600px] h-[600px] bg-gradient-radial from-bana-pink/15 via-bana-purple/5 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl z-0 transition-opacity duration-500 opacity-0 md:opacity-100" style="left: 0; top: 0;"></div>
+
+    <!-- Navigation Header with backdrop-blur -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-charcoal/70 backdrop-blur-xl border-b border-white/5 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-3 group">
+                <span class="text-3xl font-title text-bana-pink font-black tracking-wider transition-all duration-300 group-hover:text-bana-pink-hover group-hover:scale-105 inline-block">banapresso</span>
+                <span class="hidden sm:inline-block bg-gradient-to-r from-bana-pink to-bana-purple text-white text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-widest border border-white/10 shadow-lg shadow-bana-pink/20 animate-pulse">Witty Club 2.0</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8 text-sm font-semibold tracking-wide text-gray-300">
+                <a href="#empathy" class="hover:text-bana-pink transition-all duration-300 relative py-1 group">
+                    지갑 고민 솔루션
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-bana-pink transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#story" class="hover:text-bana-pink transition-all duration-300 relative py-1 group">
+                    가볍고 든든한 가치
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-bana-pink transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#generator" class="hover:text-bana-pink transition-all duration-300 relative py-1 group text-bana-pink">
+                    ✨ 반전 신메뉴 룰렛
+                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-bana-pink"></span>
+                </a>
+                <a href="#strengths" class="hover:text-bana-pink transition-all duration-300 relative py-1 group">
+                    핵심 강점
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-bana-pink transition-all duration-300 group-hover:w-full"></span>
+                </a>
+            </div>
+            <a href="#cta" class="bg-gradient-to-r from-bana-pink to-bana-purple hover:from-bana-pink-hover hover:to-pink-500 text-white text-xs md:text-sm font-bold px-6 py-3 rounded-2xl transition-all duration-300 shadow-xl shadow-bana-pink/20 hover:shadow-bana-pink/40 transform hover:-translate-y-1">
+                매장 찾기 <i class="fa-solid fa-map-pin ml-1.5 animate-bounce"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden z-10 bg-[#0c0d10]">
+        <!-- Flamboyant Glowing Backgrounds -->
+        <div class="absolute top-[20%] left-[10%] w-[400px] h-[400px] bg-bana-pink/10 rounded-full blur-[150px] animate-float-1 pointer-events-none"></div>
+        <div class="absolute bottom-[25%] right-[10%] w-[500px] h-[500px] bg-bana-purple/15 rounded-full blur-[180px] animate-float-2 pointer-events-none"></div>
+
+        <!-- Flying 3D-like glass elements and premium icons -->
+        <div class="absolute top-[25%] left-[8%] md:left-[15%] text-6xl md:text-8xl opacity-30 animate-float-1 pointer-events-none select-none filter drop-shadow-[0_10px_20px_rgba(225,29,116,0.5)]">☕</div>
+        <div class="absolute bottom-[20%] right-[8%] md:right-[15%] text-6xl md:text-8xl opacity-30 animate-float-2 pointer-events-none select-none filter drop-shadow-[0_10px_20px_rgba(142,45,226,0.5)]">🍩</div>
+        <div class="absolute top-[40%] right-[22%] text-4xl opacity-15 animate-float-2 pointer-events-none select-none">✨</div>
+        <div class="absolute bottom-[35%] left-[20%] text-5xl opacity-15 animate-float-1 pointer-events-none select-none">💥</div>
+
+        <div class="max-w-5xl mx-auto px-6 text-center relative z-20">
+            <!-- Premium Witty Badge -->
+            <div class="inline-flex items-center gap-2.5 bg-white/5 border border-white/10 px-5 py-2 rounded-full mb-8 transform hover:scale-105 transition-all duration-300 backdrop-blur-md">
+                <span class="flex h-3 w-3 rounded-full bg-bana-pink relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-bana-pink opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-bana-pink"></span>
+                </span>
+                <span class="text-xs font-black text-gray-200 uppercase tracking-widest">🚨 지갑 구원! 고품격 2천원대 메가 아메리카노</span>
+            </div>
+
+            <!-- Main Catchphrase with Gradient and Neon-Shadow -->
+            <h1 class="text-4xl sm:text-6xl md:text-8xl font-title font-black tracking-tight leading-[1.15] mb-8 select-none">
+                매일 마시는 커피니까,<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-bana-pink via-pink-400 to-bana-purple drop-shadow-[0_10px_10px_rgba(225,29,116,0.15)]">가격은 가볍게</span><br>
+                <span class="text-white relative inline-block">
+                    맛은 든든하게
+                    <span class="absolute -bottom-2 left-0 w-full h-[6px] md:h-[12px] bg-gradient-to-r from-bana-pink to-bana-purple -z-10 rounded-full blur-[1px]"></span>
+                </span>
+            </h1>
+
+            <!-- Sub description -->
+            <p class="text-base sm:text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed font-light">
+                매일 아침 습관적으로 긁던 비싼 프랜차이즈 영수증에 가벼워진 지갑.<br class="hidden sm:inline">
+                바나프레소는 가격 부담은 확 덜어내고, 스페셜티 블렌딩 에스프레소의 품격을 듬뿍 채웠습니다.
+            </p>
+
+            <!-- Buttons Interaction -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+                <a href="#empathy" class="w-full sm:w-auto bg-gradient-to-r from-bana-pink to-pink-600 hover:from-bana-pink-hover hover:to-pink-500 text-white font-title font-extrabold text-lg px-10 py-5 rounded-2xl transition-all duration-300 shadow-2xl shadow-bana-pink/40 flex items-center justify-center gap-3 group transform hover:-translate-y-1.5">
+                    <span>커피값 절약 플랜 보기</span>
+                    <i class="fa-solid fa-calculator group-hover:rotate-12 transition-transform"></i>
+                </a>
+                <a href="#generator" class="w-full sm:w-auto bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-bana-pink/50 text-white font-title font-extrabold text-lg px-10 py-5 rounded-2xl transition-all duration-300 flex items-center justify-center gap-3 backdrop-blur-md transform hover:-translate-y-1.5 group">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-pink-200">무릎 탁! 신메뉴 돌리기</span>
+                    <span class="bg-gradient-to-r from-bana-pink to-bana-purple text-[10px] text-white px-2.5 py-0.5 rounded-full font-black animate-bounce group-hover:scale-110">HOT</span>
+                </a>
+            </div>
+
+            <!-- Stats Bar (Highly Premium UI) -->
+            <div class="mt-24 pt-12 border-t border-white/5 grid grid-cols-3 gap-6 max-w-3xl mx-auto text-center backdrop-blur-sm bg-white/[0.01] rounded-3xl p-6 border border-white/10 shadow-2xl">
+                <div class="group">
+                    <div class="text-3xl sm:text-5xl font-black font-title text-bana-pink group-hover:scale-110 transition-transform duration-300">100%</div>
+                    <div class="text-xs sm:text-sm text-gray-400 font-medium mt-2">최고급 아라비카 원두</div>
+                </div>
+                <div class="border-x border-white/5 group">
+                    <div class="text-3xl sm:text-5xl font-black font-title text-transparent bg-clip-text bg-gradient-to-r from-bana-pink to-bana-purple group-hover:scale-110 transition-transform duration-300">BIG</div>
+                    <div class="text-xs sm:text-sm text-gray-400 font-medium mt-2">넉넉한 대용량 사이즈</div>
+                </div>
+                <div class="group">
+                    <div class="text-3xl sm:text-5xl font-black font-title text-bana-purple group-hover:scale-110 transition-transform duration-300">2,000+</div>
+                    <div class="text-xs sm:text-sm text-gray-400 font-medium mt-2">독창적인 커스텀 레시피</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Empathy & Budget Calculator Section -->
+    <section id="empathy" class="py-28 bg-[#111216] border-t border-white/5 relative z-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <span class="text-bana-pink font-extrabold text-sm tracking-widest uppercase bg-bana-pink/10 px-4 py-1.5 rounded-full border border-bana-pink/20">EPISODE 01 : 솔직한 소비 진단</span>
+                <h2 class="text-3xl sm:text-5xl font-title font-black mt-4 text-white">매달 스멀스멀 빠져나간 커피머니, 계산해봐요!</h2>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto text-base sm:text-lg">티끌 모아 태산이라는데, 주위에 흔한 한 잔 4,500원 이상의 프랜차이즈 커피. 아이패드나 휴가 비용이 매달 컵 속에 녹아내리고 있을지도 모릅니다.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Left: Interactive Budget Calculator with glassmorphism dashboard styling -->
+                <div class="bg-[#181a20] p-8 md:p-10 rounded-[32px] border-2 border-white/5 hover:border-bana-pink/30 transition-all duration-500 shadow-2xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-bana-pink/10 rounded-full blur-3xl pointer-events-none group-hover:bg-bana-pink/20 transition-all"></div>
+                    
+                    <h3 class="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+                        <span class="p-3 bg-bana-pink/10 rounded-2xl text-bana-pink"><i class="fa-solid fa-piggy-bank"></i></span> 
+                        나의 소비 진단 및 절약 솔루션
+                    </h3>
+                    
+                    <!-- Frequency Slider -->
+                    <div class="mb-8">
+                        <div class="flex justify-between items-center text-sm text-gray-300 mb-3">
+                            <span class="font-medium">하루 평균 수혈하는 커피 잔수</span>
+                            <span class="font-black text-xl text-bana-pink bg-bana-pink/10 px-4 py-1 rounded-xl" id="cups-count">1잔</span>
+                        </div>
+                        <input type="range" id="cups-range" min="1" max="4" value="1" step="1" 
+                               class="w-full h-3 bg-charcoal rounded-lg appearance-none cursor-pointer accent-bana-pink border border-white/5">
+                        <div class="flex justify-between text-[10px] text-gray-500 mt-2 px-1">
+                            <span>1잔</span>
+                            <span>2잔</span>
+                            <span>3잔</span>
+                            <span>4잔 이상</span>
+                        </div>
+                    </div>
+
+                    <!-- Avg Price Slider -->
+                    <div class="mb-10">
+                        <div class="flex justify-between items-center text-sm text-gray-300 mb-3">
+                            <span>자주 가던 타사 평균 커피값</span>
+                            <span class="font-black text-xl text-bana-purple bg-bana-purple/10 px-4 py-1 rounded-xl" id="price-display">4,500원</span>
+                        </div>
+                        <input type="range" id="price-range" min="3000" max="7000" value="4500" step="500" 
+                               class="w-full h-3 bg-charcoal rounded-lg appearance-none cursor-pointer accent-bana-purple border border-white/5">
+                        <div class="flex justify-between text-[10px] text-gray-500 mt-2 px-1">
+                            <span>3,000원</span>
+                            <span>4,500원</span>
+                            <span>6,000원</span>
+                            <span>7,000원</span>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Comparison Chart (Visual upgrade) -->
+                    <div class="space-y-4">
+                        <!-- Normal Coffee Bar -->
+                        <div class="bg-charcoal p-5 rounded-2xl border border-white/5">
+                            <div class="flex justify-between text-xs text-gray-400 mb-2 font-semibold">
+                                <span>기존 프랜차이즈 이용 시 (한 달)</span>
+                                <span id="current-expense" class="text-sm text-white font-bold">135,000원</span>
+                            </div>
+                            <div class="w-full bg-[#20222a] h-3.5 rounded-full overflow-hidden">
+                                <div id="bar-normal" class="bg-gray-400 h-full rounded-full transition-all duration-500 ease-out" style="width: 100%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Banapresso Bar -->
+                        <div class="bg-gradient-to-r from-bana-pink/10 to-bana-purple/10 p-5 rounded-2xl border-2 border-bana-pink/30 relative">
+                            <div class="absolute -top-3 -right-2 bg-gradient-to-r from-bana-pink to-bana-purple text-[8px] sm:text-[10px] text-white font-black px-2.5 py-1 rounded-full uppercase tracking-wider animate-pulse-neon shadow-lg">SAVING HERO</div>
+                            <div class="flex justify-between text-xs text-bana-pink-light mb-2 font-bold">
+                                <span>바나프레소 이용 시 (한 달)</span>
+                                <span id="bana-expense" class="text-sm text-white font-bold">60,000원</span>
+                            </div>
+                            <div class="w-full bg-charcoal h-3.5 rounded-full overflow-hidden">
+                                <div id="bar-bana" class="bg-gradient-to-r from-bana-pink to-bana-purple h-full rounded-full transition-all duration-500 ease-out" style="width: 44%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Beautiful Saving Announcement Badge -->
+                    <div class="mt-6 bg-[#221a22] border border-bana-pink/30 p-4 rounded-2xl text-center">
+                        <span class="text-xs text-gray-400 block font-medium mb-1">한 달 커피 지출 절약 세이브 비용</span>
+                        <div class="text-2xl sm:text-3xl font-title font-black text-transparent bg-clip-text bg-gradient-to-r from-bana-pink to-pink-400" id="saved-money">75,000원 절약!</div>
+                    </div>
+                </div>
+
+                <!-- Right: Information / Why choice bana -->
+                <div class="space-y-8">
+                    <div class="bg-gradient-to-r from-white/[0.01] to-white/[0.03] p-8 rounded-3xl border border-white/5 hover:border-bana-pink/20 transition-all duration-300">
+                        <div class="flex items-start gap-4">
+                            <span class="text-3xl bg-bana-pink/10 p-3 rounded-2xl text-bana-pink shrink-0"><i class="fa-solid fa-industry"></i></span>
+                            <div>
+                                <h3 class="text-xl font-extrabold text-white mb-2">어떻게 이런 가성비가 가능한가요?</h3>
+                                <p class="text-gray-400 text-sm leading-relaxed">
+                                    독자적인 무인 정보기술(IT) 스마트 키오스크 시스템과 가맹 원두 다이렉트 소싱망을 개발했습니다. 중간 유통과 불필요한 고비용 마케팅 수수료를 철저히 걷어내 오직 최고 원두 품질에만 비용을 투입했습니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-white/[0.01] to-white/[0.03] p-8 rounded-3xl border border-white/5 hover:border-bana-purple/20 transition-all duration-300">
+                        <div class="flex items-start gap-4">
+                            <span class="text-3xl bg-bana-purple/10 p-3 rounded-2xl text-bana-purple shrink-0"><i class="fa-solid fa-award"></i></span>
+                            <div>
+                                <h3 class="text-xl font-extrabold text-white mb-2">원두 등급과 퀄리티도 보장되나요?</h3>
+                                <p class="text-gray-400 text-sm leading-relaxed">
+                                    가격이 싸다고 저가의 로부스타 원두를 쓰지 않습니다. 100% 최고급 아라비카 스페셜 원두를 사용해 정교하게 세팅된 자체 전문 에스프레소 추출 기법으로 깊고 풍성한 에스프레소 크레마를 균일하게 제공합니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-white/[0.01] to-white/[0.03] p-8 rounded-3xl border border-white/5 hover:border-bana-pink/20 transition-all duration-300">
+                        <div class="flex items-start gap-4">
+                            <span class="text-3xl bg-bana-pink/10 p-3 rounded-2xl text-bana-pink shrink-0"><i class="fa-solid fa-mug-hot"></i></span>
+                            <div>
+                                <h3 class="text-xl font-extrabold text-white mb-2">실속과 트렌드를 가득 담은 사이즈</h3>
+                                <p class="text-gray-400 text-sm leading-relaxed">
+                                    하루 온종일 두고 마셔도 부족하지 않은 대용량 자이언트 컵으로 제공합니다. 매번 모자라 아껴마시던 답답함은 바나프레소에서 완전히 끝납니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Story & Philosophical Concept Section -->
+    <section id="story" class="py-28 bg-[#0c0d10] relative z-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <!-- Left Story Visual Glassmorphism Terminal Card -->
+                <div class="relative flex justify-center lg:justify-start">
+                    <div class="w-full max-w-lg bg-gradient-to-br from-charcoal-light to-[#1e2029] p-8 sm:p-10 rounded-[32px] border border-white/10 shadow-2xl relative overflow-hidden transform hover:scale-105 transition-all duration-500">
+                        <div class="absolute -top-12 -left-12 w-32 h-32 bg-bana-purple/20 rounded-full blur-2xl"></div>
+                        
+                        <!-- Terminal Title dots -->
+                        <div class="flex items-center justify-between mb-8">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3.5 h-3.5 rounded-full bg-red-500 shadow-md"></span>
+                                <span class="w-3.5 h-3.5 rounded-full bg-yellow-500 shadow-md"></span>
+                                <span class="w-3.5 h-3.5 rounded-full bg-green-500 shadow-md"></span>
+                            </div>
+                            <span class="text-xs text-bana-pink font-bold tracking-widest uppercase bg-bana-pink/10 px-3 py-1 rounded-full border border-bana-pink/20">Witty Studio Docs</span>
+                        </div>
+
+                        <!-- Brand core block -->
+                        <div class="space-y-6">
+                            <h4 class="text-xs font-black tracking-widest text-bana-pink uppercase">Our Core philosophy</h4>
+                            <h3 class="text-2xl sm:text-3xl font-title font-black leading-snug text-white">
+                                “지루하게 흘러가는 똑같은 매일,<br>
+                                <span class="bg-gradient-to-r from-bana-pink to-bana-purple text-white px-3 py-1.5 rounded-xl inline-block my-2 shadow-lg shadow-bana-pink/30">짜릿한 반전 한 잔</span>을<br>
+                                끼워 넣어 드릴게요!”
+                            </h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                매일 반복되는 아침 등교길, 무미건조한 오피스 타운 출근길. 우리는 단순히 목을 축이는 음료를 파는 것을 넘어, 오늘의 위트 있는 운세 문구와 독특한 메뉴를 통해 일상의 소소한 웃음과 활력을 선물합니다.
+                            </p>
+                        </div>
+
+                        <!-- Master Barista stamp -->
+                        <div class="mt-10 pt-8 border-t border-white/5 flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <span class="text-4xl bg-white/5 p-2 rounded-2xl shadow-inner">☕</span>
+                                <div>
+                                    <h5 class="text-sm font-extrabold text-gray-200">바나프레소 미식 연구소</h5>
+                                    <p class="text-[11px] text-gray-500">매일 아침 7시 30분, 당신의 일상에 즐거움을 서빙합니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Paragraph Text description -->
+                <div class="space-y-10">
+                    <div>
+                        <span class="text-bana-pink font-extrabold text-sm tracking-widest uppercase bg-bana-pink/10 px-4 py-1.5 rounded-full border border-bana-pink/20">EPISODE 02 : 브랜드의 깊이</span>
+                        <h2 class="text-3xl sm:text-5xl font-title font-black mt-4 text-white">가볍게 스며들어<br>확실하고 위트있게 흔들다</h2>
+                    </div>
+
+                    <p class="text-gray-300 leading-relaxed text-base sm:text-lg">
+                        바나프레소는 단순히 값이 저렴한 가성비 커피에 그치길 거부합니다. 누구나 쉽게 방문할 수 있도록 가장 문턱은 낮고 캐주얼한 미소로 손을 흔들며 다가오지만, 그 안에는 깜짝 놀랄 만한 위트와 맛의 반전이 가득 숨겨진 <strong class="text-bana-pink">‘위트 마스터 커피’</strong>입니다.
+                    </p>
+
+                    <!-- Features grid cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="flex gap-4 items-start bg-white/[0.02] p-5 rounded-2xl border border-white/5 hover:border-bana-pink/20 transition-all">
+                            <span class="text-2xl bg-bana-pink/10 p-3 rounded-xl text-bana-pink shrink-0"><i class="fa-solid fa-face-smile-wink"></i></span>
+                            <div>
+                                <h4 class="font-extrabold text-white text-base">매일 새로운 행운 메시지</h4>
+                                <p class="text-xs text-gray-400 mt-1.5">음료마다 다르게 제공되는 오늘의 맞춤 운세 문구 슬리브로 깜짝 서프라이즈 선사</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 items-start bg-white/[0.02] p-5 rounded-2xl border border-white/5 hover:border-bana-purple/20 transition-all">
+                            <span class="text-2xl bg-bana-purple/10 p-3 rounded-xl text-bana-purple shrink-0"><i class="fa-solid fa-rocket"></i></span>
+                            <div>
+                                <h4 class="font-extrabold text-white text-base">초고속 스마트 패스오더</h4>
+                                <p class="text-xs text-gray-400 mt-1.5">도착 직전에 바나 전용앱으로 단 1초만에 미리 선주문하고 기다림 없이 빠르게 픽업</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Game Section: Custom Menu Generator (The Neon Arcade Roulette) -->
+    <section id="generator" class="py-28 bg-[#111216] border-t border-white/5 relative z-20">
+        <!-- Background light beams -->
+        <div class="absolute top-[30%] left-[5%] w-[450px] h-[450px] bg-bana-pink/5 rounded-full blur-[150px]"></div>
+        <div class="absolute bottom-[30%] right-[5%] w-[450px] h-[450px] bg-bana-purple/5 rounded-full blur-[150px]"></div>
+
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <span class="text-bana-pink font-extrabold text-sm tracking-widest uppercase bg-bana-pink/10 px-4 py-1.5 rounded-full border border-bana-pink/20">EPISODE 03 : 무릎을 탁 치는 매칭</span>
+            <h2 class="text-3xl sm:text-5xl font-title font-black mt-4 mb-4 text-white">무릎 탁! 신메뉴 룰렛 아케이드</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto mb-16 text-sm sm:text-base">
+                "커피와 소금, 우유와 자몽 젤리?!" 당신의 상상력을 자극하고 위트 넘치는 탄성을 이끌어내는 나만의 시그니처 메뉴 레시피를 오락기 룰렛으로 합성해 보세요!
+            </p>
+
+            <!-- Retro Neon Arcade Machine -->
+            <div class="bg-gradient-to-b from-[#181a22] via-[#14151a] to-[#0c0d10] border-4 border-bana-pink/40 rounded-[40px] p-8 md:p-14 shadow-[0_0_50px_rgba(225,29,116,0.25)] relative max-w-3xl mx-auto animate-glow-border">
+                
+                <!-- Retro Flashing Indicator Lights -->
+                <div class="absolute top-4 left-1/2 -translate-x-1/2 flex gap-3">
+                    <span class="w-3 h-3 rounded-full bg-bana-pink animate-ping"></span>
+                    <span class="w-3 h-3 rounded-full bg-bana-purple animate-pulse"></span>
+                    <span class="w-3 h-3 rounded-full bg-yellow-400 animate-ping" style="animation-delay: 0.5s"></span>
+                </div>
+                
+                <div class="absolute top-6 right-6 bg-bana-pink text-[9px] sm:text-[10px] text-white px-3 py-1 rounded-md font-black tracking-widest shadow-md">NEON ARCADE</div>
+                
+                <!-- Display Slots Grid with Neon Frame -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 mt-6">
+                    
+                    <!-- Base Slot Card -->
+                    <div id="base-card" class="bg-[#20222a] p-6 rounded-2xl border-2 border-white/5 flex flex-col justify-center items-center min-h-[160px] transition-all duration-300 shadow-lg relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-bana-pink/[0.02] pointer-events-none"></div>
+                        <div id="base-emoji" class="text-5xl mb-4 transition-transform duration-300 group-hover:scale-125">☕</div>
+                        <span class="text-[9px] text-gray-500 uppercase tracking-widest font-extrabold mb-1">01. BASE</span>
+                        <h4 id="base-name" class="font-bold text-white text-base sm:text-lg">에스프레소</h4>
+                    </div>
+
+                    <!-- Topping Slot Card -->
+                    <div id="topping-card" class="bg-[#20222a] p-6 rounded-2xl border-2 border-white/5 flex flex-col justify-center items-center min-h-[160px] transition-all duration-300 shadow-lg relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-bana-purple/[0.02] pointer-events-none"></div>
+                        <div id="topping-emoji" class="text-5xl mb-4 transition-transform duration-300 group-hover:scale-125">🥛</div>
+                        <span class="text-[9px] text-gray-500 uppercase tracking-widest font-extrabold mb-1">02. TOPPING</span>
+                        <h4 id="topping-name" class="font-bold text-white text-base sm:text-lg">부드러운 우유</h4>
+                    </div>
+
+                    <!-- Twist Slot Card -->
+                    <div id="twist-card" class="bg-[#20222a] p-6 rounded-2xl border-2 border-white/5 flex flex-col justify-center items-center min-h-[160px] transition-all duration-300 shadow-lg relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-pink-400/[0.02] pointer-events-none"></div>
+                        <div id="twist-emoji" class="text-5xl mb-4 transition-transform duration-300 group-hover:scale-125">🔥</div>
+                        <span class="text-[9px] text-bana-pink uppercase tracking-widest font-extrabold mb-1">03. TWIST (반전)</span>
+                        <h4 id="twist-name" class="font-bold text-bana-pink text-base sm:text-lg">매운 시나몬</h4>
+                    </div>
+                </div>
+
+                <!-- Generated Menu Banner Panel (Neon Border Glow) -->
+                <div class="bg-gradient-to-r from-bana-pink/15 to-bana-purple/15 p-6 rounded-3xl border-2 border-bana-pink/40 shadow-inner relative overflow-hidden mb-10">
+                    <span class="absolute top-0 left-0 bg-gradient-to-r from-bana-pink to-bana-purple text-[8px] text-white px-2 py-0.5 rounded-br font-extrabold">NEW COCKTAIL</span>
+                    <p class="text-xs text-gray-400 font-medium mb-1">방금 막 탄생한 화제의 반전 레시피</p>
+                    <h3 id="final-menu-title" class="text-2xl sm:text-4xl font-title font-black text-white leading-tight drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)]">계피를 품은 아인슈페너</h3>
+                    <p id="final-menu-desc" class="text-sm sm:text-base text-bana-pink-light mt-3 max-w-xl mx-auto font-light leading-relaxed">"한 모금 넘기는 순간 알싸하고 쌉싸름한 계피 향이 커피 고유의 바디감을 끌어올려 무릎을 탁 치게 만듭니다."</p>
+                </div>
+
+                <!-- Neon Control Buttons -->
+                <div class="space-y-4">
+                    <button id="btn-spin" class="w-full bg-gradient-to-r from-bana-pink to-bana-purple hover:from-bana-pink-hover hover:to-pink-500 text-white font-title font-black text-xl py-5 sm:py-6 rounded-3xl transition-all duration-300 shadow-2xl shadow-bana-pink/30 hover:shadow-bana-pink/50 transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-4 group">
+                        <i class="fa-solid fa-gamepad animate-bounce"></i>
+                        <span>신메뉴 돌리기 (소리 켜고 스핀!)</span>
+                    </button>
+                    <p class="text-[11px] text-gray-500">※ 무인 오락 시스템 활성화를 위해 사운드 스피커를 켜두세요.</p>
+                </div>
+            </div>
+
+            <!-- Toast Success Overlay message -->
+            <div id="roulette-toast" class="mt-6 opacity-0 transition-all duration-500 scale-95 transform bg-gradient-to-r from-bana-pink/20 to-bana-purple/20 border border-bana-pink/40 text-white text-xs sm:text-sm font-semibold px-6 py-3 rounded-full inline-block max-w-md shadow-lg">
+                🎉 와우! 역대급 맛 시너지가 발견되었습니다. 화면을 캡처해서 근처 바나 매장으로 가보세요!
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Strengths Premium Section -->
+    <section id="strengths" class="py-28 bg-[#0c0d10] relative z-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <span class="text-bana-pink font-extrabold text-sm tracking-widest uppercase bg-bana-pink/10 px-4 py-1.5 rounded-full border border-bana-pink/20">EPISODE 04 : 강력한 차별성</span>
+                <h2 class="text-3xl sm:text-5xl font-title font-black mt-4 text-white">매일 마셔도 결코 질리지 않는 3가지 에너지</h2>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto text-base sm:text-lg">왜 수많은 직장인과 학생들이 아침 출근길마다 핑크빛 가판대에 줄을 서는지, 바나프레소만의 스마트한 매력을 분석해 드립니다.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
+                <!-- Strength Card 1 -->
+                <div class="bg-[#181a20] p-8 rounded-[32px] border border-white/5 hover:border-bana-pink/30 hover:-translate-y-3 transition-all duration-500 shadow-xl group relative overflow-hidden">
+                    <div class="absolute -top-12 -right-12 w-32 h-32 bg-bana-pink/5 rounded-full blur-2xl group-hover:bg-bana-pink/15 transition-all"></div>
+                    <div class="w-16 h-16 bg-bana-pink/10 rounded-2xl flex items-center justify-center text-bana-pink text-3xl mb-8 group-hover:bg-bana-pink group-hover:text-white transition-all duration-300 shadow-lg">
+                        <i class="fa-solid fa-mobile-retro animate-pulse"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-bana-pink transition-colors">줄 서기 끝, 3초 스마트앱 오더</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed font-light">
+                        매장 문턱을 넘기도 전에 이미 제조 시작! 바나프레소 전용 스마트앱을 켜고 터치 한 번으로 결제까지 끝마치면, 기다릴 틈도 없이 따뜻하고 신선한 커피가 전용 픽업대에 기다리고 있습니다.
+                    </p>
+                </div>
+
+                <!-- Strength Card 2 -->
+                <div class="bg-[#181a20] p-8 rounded-[32px] border border-white/5 hover:border-bana-purple/30 hover:-translate-y-3 transition-all duration-500 shadow-xl group relative overflow-hidden">
+                    <div class="absolute -top-12 -right-12 w-32 h-32 bg-bana-purple/5 rounded-full blur-2xl group-hover:bg-bana-purple/15 transition-all"></div>
+                    <div class="w-16 h-16 bg-bana-purple/10 rounded-2xl flex items-center justify-center text-bana-purple text-3xl mb-8 group-hover:bg-bana-purple group-hover:text-white transition-all duration-300 shadow-lg">
+                        <i class="fa-solid fa-wand-magic-sparkles animate-pulse"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-bana-purple transition-colors">내 마음대로 설계하는 스페셜 샷</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed font-light">
+                        기본 2샷에 연하게 마시기, 엑스트라 샷 추가, 꿀 시럽 조절, 아몬드 밀크로의 옵션 변경까지! 눈치볼 필요 없이 무인 키오스크에서 나만의 독창적인 레시피를 정교하게 커스터마이징하여 마실 수 있습니다.
+                    </p>
+                </div>
+
+                <!-- Strength Card 3 -->
+                <div class="bg-[#181a20] p-8 rounded-[32px] border border-white/5 hover:border-bana-pink/30 hover:-translate-y-3 transition-all duration-500 shadow-xl group relative overflow-hidden">
+                    <div class="absolute -top-12 -right-12 w-32 h-32 bg-bana-pink/5 rounded-full blur-2xl group-hover:bg-bana-pink/15 transition-all"></div>
+                    <div class="w-16 h-16 bg-bana-pink/10 rounded-2xl flex items-center justify-center text-bana-pink text-3xl mb-8 group-hover:bg-bana-pink group-hover:text-white transition-all duration-300 shadow-lg">
+                        <i class="fa-solid fa-gamepad animate-pulse"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-bana-pink transition-colors">오늘 아침 내 기분은? 운세 매시업</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed font-light">
+                        커피 한 잔을 마실 때도 재미를 더하다! 컵마다 고유의 재미있는 위트 문구, 한 줄 연애운, 금전운 메시지 등이 매일 랜덤으로 달라져 매일 아침 커피 컵을 뜯는 지루할 틈 없는 설렘을 자아냅니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA (Call to Action) & Location Finder Section -->
+    <section id="cta" class="py-28 bg-gradient-to-b from-[#0c0d10] to-[#121316] relative overflow-hidden z-20">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-bana-pink/15 rounded-full blur-[150px] pointer-events-none"></div>
+
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-20">
+            <span class="text-bana-pink font-extrabold text-sm tracking-widest uppercase bg-bana-pink/10 px-4 py-1.5 rounded-full border border-bana-pink/20">READY FOR TASTY?</span>
+            <h2 class="text-3xl sm:text-6xl font-title font-black mt-5 mb-6 text-white leading-tight">
+                가까운 핑크빛 기적으로 오셔서<br>
+                나만의 반전 에너지를 바로 마주하세요!
+            </h2>
+            <p class="text-gray-400 max-w-2xl mx-auto mb-12 text-sm sm:text-lg font-light leading-relaxed">
+                매일 지루하게 흘러가던 당신의 아침 틈바구니에 소소하고 위트 있는 행복한 균열을 낼 시간. 지금 즉시 주변 매장을 검색하여 든든하고 기분 좋은 하루를 시작해 보세요!
+            </p>
+
+            <!-- Store Location Interactive Box -->
+            <div class="max-w-2xl mx-auto bg-[#181a20] p-8 rounded-[32px] border-2 border-white/5 shadow-2xl">
+                <div class="flex flex-col sm:flex-row items-center gap-6 justify-between text-left">
+                    <div>
+                        <h4 class="font-extrabold text-xl text-white">가까운 바나프레소 스토어 검색</h4>
+                        <p class="text-xs text-gray-500 mt-1.5">강남, 홍대, 신촌, 여의도 등 수도권 150+ 핵심 지점 대성황리 운영 중!</p>
+                    </div>
+                    <!-- Find Store Button -->
+                    <button id="btn-find-store" class="w-full sm:w-auto bg-gradient-to-r from-bana-pink to-bana-purple hover:from-bana-pink-hover hover:to-pink-500 text-white text-sm font-black px-8 py-4 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-bana-pink/20 transform hover:-translate-y-1">
+                        <i class="fa-solid fa-compass animate-spin" style="animation-duration: 4s"></i>
+                        <span>내 주변 매장 맵 띄우기</span>
+                    </button>
+                </div>
+
+                <!-- Hidden Map Info (Appears elegantly upon click) -->
+                <div id="modal-container" class="hidden mt-8 p-6 bg-gradient-to-br from-charcoal to-[#181a20] border-2 border-bana-pink/30 rounded-2xl text-left animate-fade-in transition-all">
+                    <div class="flex items-start gap-4">
+                        <span class="text-3xl bg-bana-pink/10 p-2.5 rounded-xl">📍</span>
+                        <div>
+                            <h5 class="text-base font-extrabold text-white">지금 가장 가까운 핑크빛 공간을 찾아가세요!</h5>
+                            <p class="text-xs text-gray-400 mt-2 leading-relaxed">
+                                카카오맵, 네이버 지도를 비롯한 포털 검색창에 <strong class="text-bana-pink">‘바나프레소’</strong>를 검색해 보세요. 매장 내부의 밝은 핑크빛 키오스크와 귀여운 시그니처 로고 마스코트가 당신의 아침을 기분 좋게 안아드립니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Virtual Smart Phone UI Mockup (Highly responsive visual) -->
+            <div class="mt-16 flex justify-center">
+                <div class="relative bg-charcoal rounded-t-[50px] px-5 pt-5 pb-0 border-t-8 border-x-8 border-white/10 max-w-[320px] shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+                    <div class="bg-charcoal-light rounded-t-[40px] overflow-hidden p-5 text-left border-t border-x border-white/5">
+                        
+                        <!-- Mini Phone Status Bar -->
+                        <div class="flex justify-between items-center text-[10px] text-gray-500 mb-6 font-semibold">
+                            <span>09:41 AM</span>
+                            <div class="flex gap-1.5">
+                                <i class="fa-solid fa-signal"></i>
+                                <i class="fa-solid fa-wifi"></i>
+                                <i class="fa-solid fa-battery-full"></i>
+                            </div>
+                        </div>
+
+                        <!-- Mini Phone App UI -->
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-bana-pink to-bana-purple flex items-center justify-center text-white text-lg font-black shadow-lg">B</div>
+                                <div>
+                                    <h5 class="text-xs font-black text-white">바나프레소 패스오더</h5>
+                                    <p class="text-[9px] text-gray-500">기다리지 않는 모바일 번개 주문</p>
+                                </div>
+                            </div>
+                            <div class="bg-charcoal p-4 rounded-xl border border-white/5 space-y-1">
+                                <div class="text-[8px] text-gray-500 font-extrabold">REAL-TIME ORDER STATUS</div>
+                                <div class="text-[11px] font-extrabold text-bana-pink">☕ [아메리카노] 신속히 제조 중입니다! (대기 1명)</div>
+                            </div>
+                            <div class="bg-gradient-to-r from-bana-pink to-bana-purple text-center text-xs font-black text-white py-3.5 rounded-xl shadow-lg shadow-bana-pink/10 animate-pulse">
+                                패스오더 앱 실행하기
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-[#08090b] border-t border-white/5 py-20 text-gray-500 text-sm relative z-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-10 mb-16">
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl font-title text-bana-pink font-black tracking-wider">banapresso</span>
+                        <span class="text-[10px] bg-white/5 border border-white/10 px-3 py-1 rounded-full text-gray-400 font-semibold uppercase tracking-wider">Witty Club 2.0</span>
+                    </div>
+                    <p class="text-xs text-gray-400 max-w-md leading-relaxed">
+                        매일 마시는 커피니까 가격은 더욱 날씬하게, 커피 한 잔 머금는 매일의 기분은 최고급 품격으로 가득 메워드리기 위해 끊임없이 위트를 배양합니다.
+                    </p>
+                </div>
+                <div class="flex gap-5 text-2xl">
+                    <a href="#" class="hover:text-bana-pink transition-all duration-300 transform hover:scale-110"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="hover:text-bana-pink transition-all duration-300 transform hover:scale-110"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#" class="hover:text-bana-pink transition-all duration-300 transform hover:scale-110"><i class="fa-brands fa-facebook"></i></a>
+                </div>
+            </div>
+
+            <!-- Detail Copy & Sandbox warning -->
+            <div class="border-t border-white/5 pt-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8 text-xs">
+                <div class="space-y-2 leading-relaxed">
+                    <p>대표이사: 바나프레소 미식 엔지니어링 연구실 | 서울특별시 테헤란로 및 전국 번화가 일대</p>
+                    <p>© 2026 Banapresso Sandbox. 본 랜딩 페이지는 크리에이티브 시각 자산을 위트 있게 극대화한 브랜드 컨셉 데모 사이트입니다.</p>
+                </div>
+                <div class="text-left md:text-right">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-bana-pink to-pink-400 font-extrabold text-sm block">"지루한 일상에 무릎 탁! 치는 아침을 선물합니다." 🚀</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Sound and Interactive Application Logic -->
+    <script>
+        function initApp() {
+            // Helper DOM Setter Functions
+            function safeSetText(id, text) {
+                const el = document.getElementById(id);
+                if (el) el.textContent = text;
+            }
+            function safeAddClass(id, ...classNames) {
+                const el = document.getElementById(id);
+                if (el) el.classList.add(...classNames);
+            }
+            function safeRemoveClass(id, ...classNames) {
+                const el = document.getElementById(id);
+                if (el) el.classList.remove(...classNames);
+            }
+
+            // Interactive mouse spotlight background tracking
+            const spotLight = document.getElementById('ambient-spotlight');
+            if (spotLight) {
+                window.addEventListener('mousemove', (e) => {
+                    const x = e.clientX;
+                    const y = e.clientY;
+                    spotLight.style.left = `${x}px`;
+                    spotLight.style.top = `${y}px`;
+                });
+            }
+
+            // Synthesizer Audio Synth (using Tone.js) for premium arcade feel
+            // Creating a simple synth with retro settings
+            const retroSynth = new Tone.PolySynth(Tone.Synth).toDestination();
+            retroSynth.set({
+                oscillator: { type: "sine" },
+                envelope: { attack: 0.01, decay: 0.1, sustain: 0.1, release: 0.2 }
+            });
+
+            function playClickSound() {
+                try {
+                    // Quick high frequency synth blip on roll
+                    retroSynth.triggerAttackRelease("E5", "16n");
+                } catch(e) { /* audio element guard */ }
+            }
+
+            function playTickSound(note) {
+                try {
+                    // Escalating sound pattern for slot scrolling
+                    retroSynth.triggerAttackRelease(note || "C5", "16n");
+                } catch(e) {}
+            }
+
+            function playWinFanfare() {
+                try {
+                    // Delightful upward fanfare upon land
+                    const now = Tone.now();
+                    retroSynth.triggerAttackRelease("G5", "16n", now);
+                    retroSynth.triggerAttackRelease("C6", "16n", now + 0.08);
+                    retroSynth.triggerAttackRelease("E6", "8n", now + 0.16);
+                } catch(e) {}
+            }
+
+            // 1. Interactive Saving Calculator Logic
+            const cupsRange = document.getElementById('cups-range');
+            const priceRange = document.getElementById('price-range');
+            const BANA_PRICE = 2000; // Premium Big sized americano price
+
+            function updateCalculator() {
+                if (!cupsRange || !priceRange) return;
+
+                const cups = parseInt(cupsRange.value) || 1;
+                const price = parseInt(priceRange.value) || 4500;
+
+                safeSetText('cups-count', `${cups}잔`);
+                safeSetText('price-display', `${price.toLocaleString()}원`);
+
+                // 30 Days Calculation
+                const normalMonthly = cups * price * 30;
+                const banaMonthly = cups * BANA_PRICE * 30;
+                const savings = normalMonthly - banaMonthly;
+
+                safeSetText('current-expense', `${normalMonthly.toLocaleString()}원`);
+                safeSetText('bana-expense', `${banaMonthly.toLocaleString()}원`);
+                safeSetText('saved-money', `${savings.toLocaleString()}원 절약!`);
+
+                // Adjust comparison charts size safely
+                const barNormal = document.getElementById('bar-normal');
+                const barBana = document.getElementById('bar-bana');
+                
+                if (barNormal && barBana) {
+                    const ratio = (banaMonthly / normalMonthly) * 100;
+                    barNormal.style.width = '100%';
+                    barBana.style.width = `${ratio.toFixed(1)}%`;
+                }
+            }
+
+            if (cupsRange) cupsRange.addEventListener('input', updateCalculator);
+            if (priceRange) priceRange.addEventListener('input', updateCalculator);
+            
+            updateCalculator(); // Initiate on load
+
+            // 2. Neon Arcade Roulette Database & Logic
+            const bases = [
+                { name: '에스프레소 아메리카', emoji: '☕' },
+                { name: '시그니처 콜드브루', emoji: '🧊' },
+                { name: '로열 밀크티 폼', emoji: '🧋' },
+                { name: '상큼 제주 청귤 티', emoji: '🍊' },
+                { name: '제주 진한 말차라떼', emoji: '🍵' },
+                { name: '달콤 촉촉 피치 아일랜드', emoji: '🍑' }
+            ];
+
+            const toppings = [
+                { name: '부드러운 크림폼', emoji: '🥛' },
+                { name: '야생 벌꿀 소스', emoji: '🍯' },
+                { name: '꾸덕한 피스타치오 가루', emoji: '🥜' },
+                { name: '프레시 자몽 셔벗', emoji: '🍧' },
+                { name: '오레오 쿠키 크런치', emoji: '🍪' },
+                { name: '톡톡 튀는 초코팝핑', emoji: '🍫' }
+            ];
+
+            const twists = [
+                { name: '알싸한 민초 에센스', emoji: '🌿', action: '한 모금 삼키는 순간 상큼시원한 민초의 극단적 개운함이 무릎을 탁!' },
+                { name: '쌉싸름 시나몬 파우더', emoji: '🪵', action: '그윽하게 스며든 마성의 스파이시 시나몬 향이 풍미를 빈틈없이 끌어올립니다.' },
+                { name: '히말라야 솔트 크림', emoji: '🧂', action: '달달한 크림 속에 불쑥 파고드는 소금의 단짠 감칠맛이 폭발합니다.' },
+                { name: '새콤 탱글 망고 젤리', emoji: '🥭', action: '마실 때마다 불쑥 빨대를 통해 씹히는 달콤 과즙 젤리가 환상적 반전!' },
+                { name: '스파이시 크러쉬드 페퍼', emoji: '🌶️', action: '이게 과연 가능할까 싶지만 은은하게 올라오는 칼칼한 매운 매력이 최고조!' }
+            ];
+
+            let spinning = false;
+            const btnSpin = document.getElementById('btn-spin');
+
+            if (btnSpin) {
+                btnSpin.addEventListener('click', async () => {
+                    if (spinning) return;
+                    spinning = true;
+
+                    // Activate Tone.js Audio context on user gesture
+                    await Tone.start();
+                    playClickSound();
+
+                    // Apply Slot machine shaking neon CSS animation styles
+                    safeAddClass('base-card', 'scale-95', 'opacity-70', 'animate-pulse', 'border-bana-pink');
+                    safeAddClass('topping-card', 'scale-95', 'opacity-70', 'animate-pulse', 'border-bana-purple');
+                    safeAddClass('twist-card', 'scale-95', 'opacity-70', 'animate-pulse', 'border-pink-500');
+
+                    let count = 0;
+                    const notes = ["C4", "E4", "G4", "B4", "C5", "E5", "G5", "B5", "C6", "E6", "G6"];
+                    
+                    const interval = setInterval(() => {
+                        // Shuffle items during spin
+                        const bTemp = bases[Math.floor(Math.random() * bases.length)];
+                        const tTemp = toppings[Math.floor(Math.random() * toppings.length)];
+                        const wTemp = twists[Math.floor(Math.random() * twists.length)];
+
+                        safeSetText('base-emoji', bTemp.emoji);
+                        safeSetText('base-name', bTemp.name);
+
+                        safeSetText('topping-emoji', tTemp.emoji);
+                        safeSetText('topping-name', tTemp.name);
+
+                        safeSetText('twist-emoji', wTemp.emoji);
+                        safeSetText('twist-name', wTemp.name);
+
+                        // Dynamic pitch sound during roulette cycle
+                        playTickSound(notes[count % notes.length]);
+
+                        count++;
+
+                        if (count > 12) {
+                            clearInterval(interval);
+
+                            // Choose Final Landing Items
+                            const finalB = bases[Math.floor(Math.random() * bases.length)];
+                            const finalT = toppings[Math.floor(Math.random() * toppings.length)];
+                            const finalW = twists[Math.floor(Math.random() * twists.length)];
+
+                            safeSetText('base-emoji', finalB.emoji);
+                            safeSetText('base-name', finalB.name);
+
+                            safeSetText('topping-emoji', finalT.emoji);
+                            safeSetText('topping-name', finalT.name);
+
+                            safeSetText('twist-emoji', finalW.emoji);
+                            safeSetText('twist-name', finalW.name);
+
+                            // Format dynamic title cleanly
+                            const finalTitle = `${finalW.name.split(' ')[0]}에 스며든 ${finalB.name.split(' ').pop()}`;
+                            safeSetText('final-menu-title', finalTitle);
+                            safeSetText('final-menu-desc', `"${finalW.action}"`);
+
+                            // Remove Slot shaking classes
+                            safeRemoveClass('base-card', 'scale-95', 'opacity-70', 'animate-pulse', 'border-bana-pink');
+                            safeRemoveClass('topping-card', 'scale-95', 'opacity-70', 'animate-pulse', 'border-bana-purple');
+                            safeRemoveClass('twist-card', 'scale-95', 'opacity-70', 'animate-pulse', 'border-pink-500');
+
+                            // Play victory celebration fanfare
+                            playWinFanfare();
+
+                            // Trigger Confetti Party (Vibrant visual)
+                            if (typeof confetti === 'function') {
+                                confetti({
+                                    particleCount: 150,
+                                    spread: 80,
+                                    origin: { y: 0.6 },
+                                    colors: ['#E11D74', '#8E2DE2', '#FF8F00', '#FFFFFF']
+                                });
+                            }
+
+                            // Show Toast notification bar smoothly
+                            const toast = document.getElementById('roulette-toast');
+                            if (toast) {
+                                toast.classList.remove('opacity-0', 'scale-95');
+                                toast.classList.add('opacity-100', 'scale-100');
+                                setTimeout(() => {
+                                    toast.classList.remove('opacity-100', 'scale-100');
+                                    toast.classList.add('opacity-0', 'scale-95');
+                                }, 5000);
+                            }
+
+                            spinning = false;
+                        }
+                    }, 110);
+                });
+            }
+
+            // 3. CTA Find Store Info Trigger
+            const btnFindStore = document.getElementById('btn-find-store');
+            const modalContainer = document.getElementById('modal-container');
+
+            if (btnFindStore && modalContainer) {
+                btnFindStore.addEventListener('click', () => {
+                    if (modalContainer.classList.contains('hidden')) {
+                        modalContainer.classList.remove('hidden');
+                        modalContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    } else {
+                        modalContainer.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Initialize application safely
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
+    </script>
+</body>
+</html>
